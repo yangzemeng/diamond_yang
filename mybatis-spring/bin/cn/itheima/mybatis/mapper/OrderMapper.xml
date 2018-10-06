@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace是命名空间，作用sql语句的隔离，后面还有重要作用 
+#{}作用就是占位符，相当于jdbc的“?”
+parameterType：查询的参数类型
+resultType：查询结果的数据类型，如果时候pojo应该给全路径。
+-->
+<!-- mapper代理的开发规则：
+	1、namespace必须时候接口的全限定名
+	2、Statementid必须和接口的方法名称一致
+	3、接口方法的参数类型要和parameterType要一致
+	4、接口方法的返回值类型要和resultType一致
+ -->
+<mapper namespace="cn.itheima.mybatis.mapper.OrderMapper">
+	<select id="getOrderList" resultType="orders">
+		select id,user_id userId,number,createtime,note from orders
+	</select>
+	<!-- resultMap入门 -->
+	<!-- resultMap定义
+		type:返回结果映射的pojo，可以使用别名
+	 -->
+	<resultMap type="orders" id="order_list_result_map">
+		<!-- id主键的映射， property时候pojo中主键的属性，column：返回结果中主键的列-->
+		<id property="id" column="id"/>
+		<!-- 普通列使用result映射 -->
+		<result property="userId" column="user_id"/>
+		<result property="number" column="number"/>
+		<result property="createtime" column="createtime"/>
+		<result property="note" column="note"/>
+	</resultMap>
+	<select id="getOrderListResultMap" resultMap="order_list_result_map">
+		select id,user_id,number,createtime,note from orders
+	</select>
+	
+	<select id="getOrderUserList" resultType="orderuser">
+		SELECT
+			o.id,
+			o.user_id userId,
+			o.number,
+			o.createtime,
+			o.note,
+			u.username,
+			u.address
+		FROM
+			orders o
+		LEFT JOIN `user` u ON o.user_id = u.id
+	</select>
+	<resultMap type="orders" id="order_user_resultmap">
+		<id property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="number" column="number"/>
+		<result property="createtime" column="createtime"/>
+		<result property="note" column="note"/>
+		<!-- 配置一对一关联映射 -->
+		<!-- property：对于orders中user的属性.javaType：代表user属性的数据类型-->
+		<association property="user" javaType="cn.itheima.mybatis.po.User">
+			<id property="id" column="user_id"/>
+			<result property="username" column="username"/>
+			<result property="address" column="address"/>
+		</association>
+	</resultMap>
+	<select id="getOrderUserResultMap" resultMap="order_user_resultmap">
+		SELECT
+			o.id,
+			o.user_id,
+			o.number,
+			o.createtime,
+			o.note,
+			u.username,
+			u.address
+		FROM
+			orders o
+		LEFT JOIN `user` u ON o.user_id = u.id
+	</select>
+	
+	<!-- 一对多关联映射 -->
+	<resultMap type="user" id="user_order_resultmap">
+		<id property="id" column="id"/>
+		<result property="username" column="username"/>
+		<result property="birthday" column="birthday"/>
+		<result property="sex" column="sex"/>
+		<result property="address" column="address"/>
+		<!-- 配置一对多关联映射 -->
+		<!-- property：对于user对象中的集合属性 -->
+		<!-- ofType：集合中每个元素的数据类型 -->
+		<collection property="orders" ofType="orders">
+			<!-- id对于order的主键属性 -->
+			<id property="id" column="oid"/>
+			<result property="number" column="number"/>
+			<result property="createtime" column="createtime"/>
+			<result property="note" column="note"/>
+		</collection>
+	</resultMap>
+	<select id="getUserWithOrders" resultMap="user_order_resultmap">
+		SELECT
+			u.id,
+			u.username,
+			u.birthday,
+			u.sex,
+			u.address,
+			o.id oid,
+			o.number,
+			o.createtime,
+			o.note
+		FROM
+			`user` u
+		LEFT JOIN orders o ON u.id = o.user_id
+	</select>
+</mapper>

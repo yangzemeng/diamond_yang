@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 配置属性 
+		先加载内部属性，再加载外部属性，如果有同名属性会覆盖。
+	-->
+    <!-- <properties resource="db.properties"/>-->
+	<!-- 和spring整合后 environments配置将废除-->
+	<typeAliases >
+		<package name="com.pojo"></package>
+	</typeAliases>
+	<!--<environments default="development">
+		<environment id="development">
+		&lt;!&ndash; 使用jdbc事务管理&ndash;&gt;
+			<transactionManager type="JDBC" />
+		&lt;!&ndash; 数据库连接池&ndash;&gt;
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driver}" />
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>-->
+	<!-- 加载mapper文件 -->
+
+	<mappers>
+		<!-- resource基于classpath查找 -->
+		<!--<mapper resource="sqlmap/user.xml"/>
+		<mapper resource="usermapper/usermapper.xml"/>
+		<mapper resource="usermapper/orders.xml"/>-->
+		<!-- <mapper resource="mapper/mapper.xml"/> -->
+		<!-- 根据接口名称加载mapper文件
+		要求：1、mapper映射文件和接口在同一个目录下
+		    2、mapper映射文件的名称和接口名称一致。
+		    3、class就是接口的权限定名
+		 -->
+		<!-- <mapper class="cn.itheima.mybatis.mapper.UserMapper"/> -->
+		<!-- 使用扫描包的形式加载mapper文件 -->
+		<!--<package name="cn.itheima.mybatis.mapper"/>-->
+	</mappers>
+</configuration>

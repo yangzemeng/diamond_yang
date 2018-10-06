@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace是命名空间，作用sql语句的隔离，后面还有重要作用 
+#{}作用就是占位符，相当于jdbc的“?”
+parameterType：查询的参数类型
+resultType：查询结果的数据类型，如果时候pojo应该给全路径。
+-->
+<mapper namespace="com.dao.UserMapper">
+	<!-- #为占位符-->
+	<select id="getUserById" parameterType="int" resultType="com.pojo.User">
+		SELECT * FROM user WHERE id=#{id};
+	</select>
+    <select id="getUserByUsername" parameterType="String" resultType="com.pojo.User">
+		SELECT * FROM USER WHERE username LIKE '%${value}%';
+	</select>
+	<insert id="insertUser" parameterType="com.pojo.User">
+    <selectKey keyProperty="id" resultType="int" order="AFTER">
+		SELECT LAST_INSERT_ID();
+	</selectKey>
+		INSERT INTO  USER(username,birthday,sex,address) VALUES(#{username},#{birthday},#{sex},#{address});
+	</insert>
+   <update id="updateUser" parameterType="com.pojo.User">
+	   UPDATE  USER  SET username=#{username} WHERE id=#{id};
+   </update>
+	<select id="getUserByVo" parameterType="QueryVo" resultType="user">
+		select * from  user where  id=#{user.id};
+	</select>
+	<select id="getCount"  resultType="int">
+		SELECT  COUNT(1) from  USER;
+	</select>
+	<select id="getList" parameterType="user" resultType="user">
+		SELECT  * from USER 
+		WHERE 1=1
+		<if test="id!=null">
+			AND id=#{id}
+		</if>
+		<if test="username != null and username !=''">
+			AND username LIKE '%${username}%'
+		</if>
+	</select>
+	<!--select * from user where id in(1,10,16,22) where标签可以去掉多余的and-->
+	<select id="getListFor" parameterType="QueryVo" resultType="user">
+		SELECT * from USER
+		<where>
+			<foreach collection="ids" item="id" open="and id in (" close=")" separator=",">
+				#{id}
+			</foreach>
+		</where>
+	</select>
+	<select id="getListUser" resultType="UserOrder">
+     select o.id,o.user_id userId,o.number,o.createtime,u.username, u.address from
+     orders o left join  user u on o.user_id=u.id
+	</select>
+	<!-- resultmap的映射-->
+	<resultMap id="getListMap" type="com.pojo.Orders">
+		<id property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="number" column="number"/>
+		<result property="createtime" column="createtime"/>
+		<association property="user" javaType="com.pojo.User">
+			<id property="id" column="user_id"/>
+			<result property="username" column="username"/>
+			<result property="address" column="address"/>
+		</association>
+	</resultMap>
+	<select id="getListuser2" resultMap="getListMap">
+		select o.id,o.user_id ,o.number,o.createtime,u.username, u.address from
+     orders o left join  user u on o.user_id=u.id
+	</select>
+</mapper>

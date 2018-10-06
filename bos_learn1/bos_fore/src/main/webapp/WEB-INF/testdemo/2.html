@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>AngularJs的使用</title>
+		<script type="text/javascript" src="../../../../../bos_fore/src/main/webapp/js/angular.min.js" ></script>
+	</head>
+	<body >
+		<div ng-app="myapp" ng-controller="myctrl">
+		<div>
+			<input type="text" name="name" ng-model="name"/>
+			<input type="button" value="清空" ng-click="clearVal()"/>
+		</div>
+		<div>
+			hello,{{name}}
+			</div>
+			</div>
+		<script type="text/javascript">
+			var myapp=angular.module("myapp",[]);
+			myapp.controller("myctrl",["$scope",function($scope){
+				$scope.name="黑马程序员";
+				$scope.clearVal=function(){
+					$scope.name="";
+				}
+			}])
+		</script>
+	</body>
+</html>

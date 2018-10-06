@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace是命名空间，作用sql语句的隔离，后面还有重要作用 
+#{}作用就是占位符，相当于jdbc的“?”
+parameterType：查询的参数类型
+resultType：查询结果的数据类型，如果时候pojo应该给全路径。
+-->
+<mapper namespace="test">
+	<select id="getUserById" parameterType="int" resultType="cn.itheima.mybatis.po.User">
+		SELECT * FROM `user` WHERE id=#{id};
+	</select>
+	
+	<!-- 如果查询结果返回list， resultType设置为list中一个元素的数据类型
+		${}字符串拼接指令
+	-->
+	<select id="getUserByName" parameterType="string" resultType="cn.itheima.mybatis.po.User">
+		SELECT * FROM `user` WHERE username LIKE '%${value}%'
+	</select>
+	<!-- 参数时候pojo时，#{}中的名称就是pojo的属性 -->
+	<insert id="insertUser" parameterType="cn.itheima.mybatis.po.User">
+		<!-- keyProperty：对于pojo的主键属性 
+			resultType:对应主键的数据类型
+			order：是在insert语句执行之前或者之后。
+			如果使用uuid做主键，应该先生成主键然后插入数据，此时应该使用Before
+		-->
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT into user (username,birthday,sex,address) 
+		values (#{username}, #{birthday}, #{sex}, #{address})
+	</insert>
+	
+	<!-- 删除用户 -->
+	<delete id="deleteUser" parameterType="int">
+		DELETE from user WHERE id=#{id1}
+	</delete>
+	<!-- 修改用户信息 -->
+	<update id="updateUser" parameterType="cn.itheima.mybatis.po.User">
+		update user set username=#{username} WHERE id=#{id}
+	</update>
+</mapper>

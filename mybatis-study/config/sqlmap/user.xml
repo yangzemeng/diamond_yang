@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace是命名空间，作用sql语句的隔离，后面还有重要作用 
+#{}作用就是占位符，相当于jdbc的“?”
+parameterType：查询的参数类型
+resultType：查询结果的数据类型，如果时候pojo应该给全路径。
+-->
+<mapper namespace="test">
+	<!-- #为占位符-->
+	<select id="getUserById" parameterType="int" resultType="com.pojo.User">
+		SELECT * FROM user WHERE id=#{id};
+	</select>
+    <select id="getUserByUsername" parameterType="String" resultType="com.pojo.User">
+		SELECT * FROM USER WHERE username LIKE '%${value}%';
+	</select>
+	<insert id="insertUser" parameterType="com.pojo.User">
+    <selectKey keyProperty="id" resultType="int" order="AFTER">
+		SELECT LAST_INSERT_ID();
+	</selectKey>
+		INSERT INTO  USER(username,birthday,sex,address) VALUES(#{username},#{birthday},#{sex},#{address});
+	</insert>
+   <update id="updateUser" parameterType="com.pojo.User">
+	   UPDATE  USER  SET username=#{username} WHERE id=#{id};
+   </update>
+</mapper>
