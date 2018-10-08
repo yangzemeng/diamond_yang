@@ -71,6 +71,7 @@ public class CustomerController {
 	@ResponseBody
 	public Customer getCustomerById(Long id) {
 		Customer customer = customerService.getCustomerById(id);
+
 		return customer;
 	}
 	

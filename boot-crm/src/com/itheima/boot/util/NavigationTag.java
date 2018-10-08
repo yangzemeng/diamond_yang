@@ -30,7 +30,7 @@ public class NavigationTag extends TagSupport {
      * 显示页码数量
      */
     private int number = 5;
-    
+
     @Override
     public int doStartTag() throws JspException {
         JspWriter writer = pageContext.getOut();
