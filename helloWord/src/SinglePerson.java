@@ -14,6 +14,7 @@ public class SinglePerson {
     }
     //创建静态方法
     public static SinglePerson getSinglePerson(){
+        System.out.println("hahah");
         return singlePerson;
     }
 }
