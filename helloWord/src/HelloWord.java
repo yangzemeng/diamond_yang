@@ -6,6 +6,7 @@ public class HelloWord {
         Map<String,String> map=new HashMap<>();
         map.put("name","diamond");
         map.put("age","18");
+        map.put("sex","1");
         SinglePerson singlePerson = SinglePerson.getSinglePerson();
         System.out.println(map);
     }
