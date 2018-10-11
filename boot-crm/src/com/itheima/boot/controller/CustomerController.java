@@ -72,6 +72,8 @@ public class CustomerController {
 	@RequestMapping("/customer/edit")
 	@ResponseBody
 	public Customer getCustomerById(Long id) {
+
+
 		Customer customer = customerService.getCustomerById(id);
 		return customer;
 	}
