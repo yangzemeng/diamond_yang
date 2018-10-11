@@ -60,7 +60,7 @@ public class ItemController {
         String contextPath = request.getContextPath()+"/upload2/";
         picture.transferTo(new File(realPath+"/"+picName+extName));
         items.setPic(contextPath+"/"+picName+extName);
-       itemService.update(items);
+        itemService.update(items);
 
         return "forward:/itemEdit.action";
     }

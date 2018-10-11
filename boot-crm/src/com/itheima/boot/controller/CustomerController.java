@@ -2,11 +2,13 @@ package com.itheima.boot.controller;
 
 import java.util.List;
 
+import com.itheima.boot.pojo.Person;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -72,6 +74,17 @@ public class CustomerController {
 	public Customer getCustomerById(Long id) {
 		Customer customer = customerService.getCustomerById(id);
 		return customer;
+	}
+	@RequestMapping("/customer/test")
+	@ResponseBody
+	public Person getPeerson(@RequestBody Person person){
+		Person person1 = new Person();
+		person1.setId(person.getId());
+		person1.setAddress(person.getAddress());
+		person1.setAge(person.getAge());
+		person1.setName(person.getName());
+        System.out.println(person1);
+		return person1;
 	}
 	
 	@RequestMapping(value="/customer/update", method=RequestMethod.POST)
