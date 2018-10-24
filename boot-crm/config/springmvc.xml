@@ -19,12 +19,19 @@
 	
 	<context:component-scan base-package="com.itheima.boot.controller" />
 	<!-- 配置处理器映射器 适配器 -->
-	<mvc:annotation-driven />
+
 	<!-- 配置视图解释器 jsp -->
 	<bean id="jspViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg index="0" value="UTF-8"/>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 
 </beans>		

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>layout布局页面</title>
+		<script type="text/javascript" src="../js/jquery-1.8.3.js" ></script>
+		<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js" ></script>
+		<script type="text/javascript" src="../js/easyui/locale/easyui-lang-zh_CN.js" ></script>
+		<link rel="stylesheet" href="../js/easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" href="../js/easyui/themes/icon.css" />
+		<script src="../js/ztree/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../js/ztree/zTreeStyle.css"/>
+		<!--<script type="text/javascript">
+			// 页面加载后执行
+			$(function(){
+				// 对链接绑定点击事件
+				$("#czbk").click(function(){
+					// 添加一个新的选项卡 
+					$("#mytabs").tabs('add',{
+						title:'传智播客',
+						content: '传智播客专注IT培训教育'
+					});
+				});
+			});
+		</script>-->
+		<script type="text/javascript">
+			$(function(){
+				// 1、 进行ztree菜单设置 
+				var setting = {
+					data: {
+						simpleData: {
+							enable: true // 支持简单json数据格式
+						}
+					},
+					callback: {
+						onClick : function(event, treeId, treeNode, clickFlag){
+							var content = '<div style="width:100%;height:100%;overflow:hidden;">'
+								+ '<iframe src="'
+								+ treeNode.page
+								+ '" scrolling="auto" style="width:100%;height:100%;border:0;" ></iframe></div>';
+						   //消除重复添加
+						   //判断自定义的page
+						   if(treeNode.page !=undefined && treeNode.page != ""){
+						   	//如果选项卡打开,选中
+						   	if($("#mytabs").tabs('exists',treeNode.name)){
+						   	//选中选项卡	
+						   	$("#mytabs").tabs('select',treeNode.name);
+						   	}else{
+						   		//没有选项卡，进行添加
+						   		  $("#mytabs").tabs('add',{
+						    	title:treeNode.name,
+						    	content:content,
+						    	closable:true
+						    });
+						   	}
+						   }
+						 
+						}
+					}
+					
+				};
+				
+				// 2、提供ztree树形菜单数据 
+				var zNodes = [
+					{id:1,pId:0,name:"父节点一"},
+					{id:2,pId:0,name:"父节点二"},
+					{id:11,pId:1,name:"子节点一"},
+					{id:12,pId:1,name:"子节点二"},
+					{id:13,pId:2,name:"传智播客",page:"http://www.itcast.cn"},
+					{id:14,pId:2,name:"百度",page:"https://www.baidu.com"}
+				];
+				
+				// 3、生成菜单,里面有三个参数，第一个是要加入地方的id，第二个是setting（格式基本固定，需要将enable改为true，才能支持简单的json格式，第三个是菜单数据）
+				$.fn.zTree.init($("#baseMenu"), setting, zNodes);
+				//对选项卡进行右击,出现mune窗口
+				  var currentRightTitle; //定义一个全局变量，在之后的窗口关闭中使用
+					$("#mytabs").tabs({
+					onContextMenu: function(e, title,index){
+						currentRightTitle=title;
+						// 阻止默认菜单显示
+						e.preventDefault();
+						
+						
+						// 显示自定义右键菜单
+						$("#mumen").menu('show',{
+							left : e.pageX,
+							top : e.pageY
+						});
+					}
+				});
+		  		$("#mumen").menu({
+				onClick:function(item){
+					if(item.name=="Close"){
+						$("#mytabs").tabs('close',currentRightTitle)
+					}else if(item.name=="CloseOthers"){
+						var mytabs=$("#mytabs").tabs('tabs');
+						$(tabs).each(function(){
+							if($(this).panel('options').title!=currentRightTitle){
+								$("#mytabs").tabs('close',$(this).panel('options').title);
+							}
+						});
+					}else if(item.name=="CloseAll"){
+						var tabs=$("#mytabs").tabs('tabs');
+						$(tabs).each(function(){							
+								$("#mytabs").tabs('close',$(this).panel('options').title);						
+						});
+					}
+				}
+			});
+								
+				
+			});
+		
+			
+		</script>
+	</head>
+	<body class="easyui-layout">
+		<div data-options="region:'north',title:'传智播客'" style="height:100px ;">北部区域</div>
+		<!--  折叠面板 -->	
+			<div data-options="region:'west',title:'菜单导航'" style="width: 180px;">
+			<!--折叠面板 -->
+			<div class="easyui-accordion" data-options="fit:true">
+				<div data-options="title:'基础菜单'">
+				<!--<a href="javascript:void(0)" id="czbk">传智播客</a>-->
+		
+				<ul id="baseMenu" class="ztree"></ul>
+				</div>
+				<div data-options="title:'系统菜单'">面板二</div>
+			</div>
+		</div>
+		<!--  选项卡面板 -->	
+			<div data-options="region:'center'">
+			<!-- 选项卡面板-->
+			<div id="mytabs" class="easyui-tabs" data-options="fit:true">
+				<div data-options="title:'选项卡面板一',closable:true">选项卡面板一</div>				
+				<div data-options="title:'选项卡面板二'">选项卡面板二</div>
+			</div>
+		</div>
+		<div data-options="region:'east'" style="width: 180px;">东部区域</div>
+		<div data-options="region:'south'" style="height:80px;">南部区域</div>
+		<!--
+        	作者：offline
+        	时间：2018-08-05
+        	描述：菜单初始化，一般菜单都是影藏的
+        -->
+        <div id="mumen" class="easyui-menu" style="width: 120px">
+        	<div id="close" name="Close">关闭当前窗口</div>
+			<div name="CloseOthers">关闭其它窗口</div>
+			<div class="menu-sep"></div>  <!-- 分隔线 -->
+			<div data-options="iconCls:'icon-cancel'"  name="CloseAll">关闭全部窗口</div> <!--关闭窗口前面的样式 -->
+        </div>
+	</body>
+</html>

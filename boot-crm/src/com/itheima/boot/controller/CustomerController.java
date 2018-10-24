@@ -19,6 +19,7 @@ import com.itheima.boot.pojo.QueryVo;
 import com.itheima.boot.service.BaseDictService;
 import com.itheima.boot.service.CustomerService;
 import com.itheima.boot.util.Page;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 客户管理Controller
@@ -33,6 +34,7 @@ public class CustomerController {
 	private BaseDictService baseDictService;
 	@Autowired
 	private CustomerService customerService;
+
 	@Value("${customer.source.code}")
 	private String custSorceCode;
 	@Value("${customer.industory.code}")
@@ -48,7 +50,8 @@ public class CustomerController {
 		}
 		//初始化客户来源，采用的是异步查询，当查询页面的时候，需要进行下拉单的异步查询操作
 		List<BaseDict> sourceList = baseDictService.getDictListByTypeCode(custSorceCode);
-		//所属行业
+
+        //所属行业
 		List<BaseDict> industoryList = baseDictService.getDictListByTypeCode(custIndustoryCode);
 		//客户级别
 		List<BaseDict> levelList = baseDictService.getDictListByTypeCode(custLevelCode);
@@ -56,7 +59,10 @@ public class CustomerController {
 		model.addAttribute("fromType", sourceList);
 		model.addAttribute("industryType", industoryList);
 		model.addAttribute("levelType", levelList);
-		//根据查询条件查询客户列表
+        ModelAndView modelAndView =  new ModelAndView();
+
+
+        //根据查询条件查询客户列表
 		Page<Customer> page = customerService.getCustomerList(queryVo);
 		//把客户列表传递给页面
 		model.addAttribute("page", page);
