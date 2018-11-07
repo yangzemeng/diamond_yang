@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author diamod
@@ -45,5 +46,11 @@ public class ProductServiceImpl implements ProductService {
     public Integer delete(Integer id) {
        Integer s= productDao.delete(id);
         return s;
+    }
+
+    @Override
+    public List<Product> findBy(Map<String, String> map) {
+       List<Product> list=productDao.findBy(map);
+        return list;
     }
 }

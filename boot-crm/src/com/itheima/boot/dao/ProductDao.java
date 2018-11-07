@@ -1,8 +1,10 @@
 package com.itheima.boot.dao;
 
 import com.itheima.boot.pojo.Product;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author diamod
@@ -20,4 +22,6 @@ public interface ProductDao {
     Integer update(Product product);
 
     Integer delete(Integer id);
+
+    List<Product> findBy(@Param("params") Map<String, String> map);
 }

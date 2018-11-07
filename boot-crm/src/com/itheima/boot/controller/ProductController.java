@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author diamod
@@ -39,6 +40,17 @@ public class ProductController {
             ));
         }*/
         List<Product> productList=productService.quaryBy(product);
+        return productList;
+    }
+    @RequestMapping("/product/find")
+    @ResponseBody
+    public List<Product> findBy(@RequestParam Map<String,String> map) throws UnsupportedEncodingException {
+        //乱码处理
+        /*if (StringUtils.isNotBlank(product.getPname())) {
+            product.setPname(new String(product.getPname().getBytes("iso8859-1"),"utf-8"
+            ));
+        }*/
+        List<Product> productList=productService.findBy(map);
         return productList;
     }
     @RequestMapping("/product/insert")

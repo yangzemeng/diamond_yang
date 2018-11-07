@@ -3,6 +3,7 @@ package com.itheima.boot.service;
 import com.itheima.boot.pojo.Product;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author diamod
@@ -20,4 +21,6 @@ public interface ProductService {
     Integer update(Product product);
 
     Integer delete(Integer id);
+
+    List<Product> findBy(Map<String, String> map);
 }

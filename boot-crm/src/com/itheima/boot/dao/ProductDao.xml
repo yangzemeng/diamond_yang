@@ -49,4 +49,8 @@
         product
         where pid=#{id}
     </delete>
+    <select id="findBy" resultType="com.itheima.boot.pojo.Product">
+        select *  FROM product
+        where pname=#{params.pname}
+    </select>
 </mapper>
