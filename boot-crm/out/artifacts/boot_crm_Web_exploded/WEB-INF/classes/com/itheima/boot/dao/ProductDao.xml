@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.boot.dao.ProductDao">
+    <select id="getProductList"  resultType="com.itheima.boot.pojo.Product">
+        select * from product
+    </select>
+    <select id="quaryBy" parameterType="com.itheima.boot.pojo.Product" resultType="com.itheima.boot.pojo.Product">
+    SELECT
+        pid,
+        pname,
+        pcolor,
+        pnum
+    from product
+    <where>
+        <if test="pname !=null and pname != ''">
+            and pname like '%${pname}%'
+        </if>
+        <if test="pcolor !=null and pcolor != ''">
+            and pcolor like '%${pcolor}%'
+        </if>
+    </where>
+    </select>
+    <insert id="insert" parameterType="com.itheima.boot.pojo.Product" >
+        INSERT INTO
+        product(pname,pcolor,pnum)
+        values(#{pname},#{pcolor},#{pnum})
+
+    </insert>
+    <update id="update" parameterType="com.itheima.boot.pojo.Product">
+        UPDATE
+        product
+        <set>
+          <if test="pname !=null and pname !=''">
+              pname=#{pname},
+          </if>
+            <if test="pcolor != null and pcolor != ''">
+                pcolor=#{pcolor},
+            </if>
+            <if test="pnum != null and pnum != ''">
+                pnum=#{pnum}
+            </if>
+        </set>
+        where pid=#{pid}
+    </update>
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM
+        product
+        where pid=#{id}
+    </delete>
+    <select id="findBy" resultType="com.itheima.boot.pojo.Product">
+        select *  FROM product
+        where pname=#{params.pname}
+    </select>
+</mapper>
